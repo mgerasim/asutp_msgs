@@ -17,5 +17,5 @@ class StorageReader:
                     MessageProcessing.run(file_name)
                 except Exception:
                     print(f"Файл не обработан: {file_name}")
-                    print(traceback.format_exc())
+                    #print(traceback.format_exc())
 
