@@ -1,35 +1,63 @@
+import csv
 
 from openpyxl import load_workbook
 from peewee import IntegrityError
 
 from app.helpers.extract_nps_from_file_name_helper import ExtractNpsFromFileNameHelper
+from app.message.processing.fetchers.field_fetcher import FieldFetcher
 from app.models.event import Event
 
 
 class MessageProcessing:
     @staticmethod
-    def run(file_name):
+    def read_rows(file_name):
+        import pathlib
+        file_extension = pathlib.Path(file_name).suffix
+        match file_extension:
+            case '.xlsx':
+                return MessageProcessing.read_from_xlsx(file_name)
+            case '.csv':
+                return MessageProcessing.read_from_csv(file_name)
+            case _:
+                raise Exception(f"""Неподдерживаемое расширение файла #{file_name}""")
+
+    @staticmethod
+    def read_from_xlsx(file_name):
         wb = load_workbook(file_name)
         sheet = wb.active
+        return sheet.rows
 
+    @staticmethod
+    def read_from_csv(file_name):
+        rows = []
+        with open(file_name, "r") as f:
+            data = csv.reader(f)
+            for row in data:
+                rows.push(row)
+
+    @staticmethod
+    def run(file_name):
+        rows = MessageProcessing.read_rows(file_name)
         index = 0
-        for row in sheet.rows:
+        columns = None
+        for row in rows:
             index += 1
-            if index == 1:
+            if row[1].value is None:
                 continue
-            event = Event()
-            event.date_created = row[0].value
-            event.source = row[2].value
-            event.username = row[3].value
-            event.priority = row[4].value
-            event.message = row[5].value
-            event.file_name = file_name
-            event.nps = ExtractNpsFromFileNameHelper.run(file_name=file_name)
+            if columns is None:
+                columns = row
+                continue
 
             if row[0].value is None:
                 continue
 
-            print(f"""{row[0].value} {row[2].value} {row[3].value} {row[4].value} {row[5].value} {file_name}""")
+            event = Event()
+            event.date_created = FieldFetcher.DateCreatedFetch(columns, row)
+            event.object = FieldFetcher.ObjectFetch(columns, row)
+            event.severity = FieldFetcher.SeverityFetch(columns, row)
+            event.message = FieldFetcher.MessageFetch(columns, row)
+            event.file_name = file_name
+            event.nps = ExtractNpsFromFileNameHelper.run(file_name=file_name)
 
             try:
                 event.save()
