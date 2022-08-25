@@ -4,7 +4,7 @@ services:
 
   jupiter:
     image: jupyter/datascience-notebook
-    container_name: jupyter
+    container_name: asutp_jupyter
     restart: always
     ports:
       - '8888:8888'
@@ -13,7 +13,7 @@ services:
 
   prometheus:
     image: prom/prometheus
-    container_name: prometheus
+    container_name: asutp_prometheus
     restart: always
     ports:
       - '9090:9090'
@@ -23,6 +23,7 @@ services:
       - '--config.file=/etc/prometheus/prometheus.yml'
 
   grafana:
+    container_name: asutp_grafana
     image: grafana/grafana:latest
     volumes:
       - ./config/grafana.yml:/etc/grafana/provisioning/datasources/datasource.yaml
@@ -34,7 +35,7 @@ services:
 
   mariadb:
     image: mariadb:latest
-    container_name: mariadb
+    container_name: asutp_mariadb
     restart: always
 #    command: --init-file /data/application/init.sql
     volumes:
@@ -52,7 +53,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin
+    container_name: asutp_phpmyadmin
     links:
       - mariadb
     environment:
@@ -62,8 +63,19 @@ services:
       PMA_ARBITRARY: 1
     restart: always
     ports:
-      - '8081:80'
+      - '8082:80'
     depends_on:
+      - mariadb
+
+  app_main:
+    container_name: asutp_app_main
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    restart: always
+    volumes:
+      - ./storage_example:/usr/src/app/storage_example
+    links:
       - mariadb
 
 networks:

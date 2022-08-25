@@ -1,1 +1,1 @@
-storage: "D:\\Выгрузка сообщений МПСА НПС"
+storage: "./storage_example"

@@ -9,6 +9,8 @@ class FieldFetcher:
                     return row[index].value
                 case 'ДАТА':
                     return row[index].value
+                case 'ДАТА СООБЩЕНИЯ':
+                    return row[index].value
 
     @staticmethod
     def MessageFetch(columns, row):

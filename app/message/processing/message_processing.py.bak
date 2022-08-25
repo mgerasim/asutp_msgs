@@ -20,7 +20,7 @@ class MessageProcessing:
             case '.csv':
                 return MessageProcessing.read_from_csv(file_name)
             case _:
-                raise Exception(f"""РќРµРїРѕРґРґРµСЂР¶РёРІР°РµРјРѕРµ СЂР°СЃС€РёСЂРµРЅРёРµ С„Р°Р№Р»Р° #{file_name}""")
+                raise Exception(f"""Неподдерживаемое расширение файла #{file_name}""")
 
     @staticmethod
     def read_from_xlsx(file_name):
@@ -43,7 +43,7 @@ class MessageProcessing:
         columns = None
         for row in rows:
             index += 1
-            if row[0].value is None:
+            if row[1].value is None:
                 continue
             if columns is None:
                 columns = row
@@ -62,9 +62,8 @@ class MessageProcessing:
 
             try:
                 event.save()
-            except Exception as e:
-                if 'UNIQUE constraint failed' not in str(e):
-                    print(str(e))
+            except IntegrityError:
+                pass
 
 
 

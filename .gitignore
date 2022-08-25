@@ -187,3 +187,7 @@ fabric.properties
 *.db
 
 storage_example*/
+
+data/
+
+asutp_msgs.db*
