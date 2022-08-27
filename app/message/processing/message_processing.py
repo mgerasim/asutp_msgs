@@ -1,4 +1,5 @@
 import csv
+import datetime
 
 from openpyxl import load_workbook
 from peewee import IntegrityError
@@ -6,6 +7,7 @@ from peewee import IntegrityError
 from app.helpers.extract_nps_from_file_name_helper import ExtractNpsFromFileNameHelper
 from app.message.processing.fetchers.field_fetcher import FieldFetcher
 from app.models.event import Event
+from app.models.file import File
 
 
 class MessageProcessing:
@@ -39,6 +41,13 @@ class MessageProcessing:
     @staticmethod
     def run(file_name):
         rows = MessageProcessing.read_rows(file_name)
+
+        file = File()
+        file.file_name = file_name
+        file.date_started = datetime.datetime.now()
+        file.count_added = 0
+        file.count_duplicated = 0
+
         index = 0
         columns = None
         for row in rows:
@@ -62,9 +71,19 @@ class MessageProcessing:
 
             try:
                 event.save()
+                file.count_added += 1
             except Exception as e:
-                if 'UNIQUE constraint failed' not in str(e):
-                    print(str(e))
+                if 'UNIQUE constraint failed' in str(e):
+                    file.count_duplicated += 1
+                    continue
+                if 'Duplicate entry' in str(e):
+                    file.count_duplicated += 1
+                    continue
+                print(str(e))
+                file.error_msg = str(e)
+
+            file.date_ended = datetime.datetime.now()
+            file.save()
 
 
 

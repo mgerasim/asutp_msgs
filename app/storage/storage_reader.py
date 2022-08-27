@@ -13,8 +13,9 @@ class StorageReader:
         print(cfg['storage'])
         current_files = CurrentFileNameListHelper.load()
 
+        storage = os.getenv('STORAGE', cfg['storage'])
 
-        for root, dirs, files in os.walk(cfg['storage']):
+        for root, dirs, files in os.walk(storage):
             for file in files:
                 file_name = os.path.join(root, file)
                 try:

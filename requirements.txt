@@ -2,3 +2,5 @@ openpyxl
 pyYAML
 peewee
 pathlib
+pymysql
+cryptography

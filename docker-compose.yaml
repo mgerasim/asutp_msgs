@@ -7,9 +7,12 @@ services:
     container_name: asutp_jupyter
     restart: always
     ports:
-      - '8888:8888'
+      - '8889:8888'
     volumes:
       - ./jupyter/work:/home/jovyan/work
+    environment:
+      JUPYTER_ENABLE_LAB: "yes"
+    command: "start-notebook.sh --NotebookApp.token='' --NotebookApp.password=''"
 
   prometheus:
     image: prom/prometheus
@@ -27,19 +30,20 @@ services:
     image: grafana/grafana:latest
     volumes:
       - ./config/grafana.yml:/etc/grafana/provisioning/datasources/datasource.yaml
-      - ./grafana/data:/var/lib/grafana
+      - ./data/grafana:/var/lib/grafana
     ports:
       - "3001:3000"
     depends_on:
       - prometheus
+    user: "1000"
 
-  mariadb:
+  db:
     image: mariadb:latest
-    container_name: asutp_mariadb
+    container_name: asutp_db
     restart: always
-#    command: --init-file /data/application/init.sql
+#    command: --init-file /docker-entrypoint-initdb.d/init.sql
     volumes:
-#      - ./init.sql:/data/application/init.sql
+      - ./config/init.sql:/docker-entrypoint-initdb.d/init.sql
       - ./data/db:/var/lib/mysql
     ports:
       - "6033:3306"
@@ -49,7 +53,7 @@ services:
       - MARIADB_USER=asutp
       - MARIADB_PASSWORD=asutp
       - MARIADB_ROOT_PASSWORD=asutp
-    #    entrypoint: mysql -uroot -ptgbot -e "create database huobibotdb_dev DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci";
+    #user: "1000:1000"
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin

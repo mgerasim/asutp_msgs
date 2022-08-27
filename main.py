@@ -4,13 +4,21 @@
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 
 # Press the green button in the gutter to run the script.
-from app.core.models.base_model import db2
+from app.core.models.base_model import conn
 from app.models.event import Event
+from app.models.file import File
 from app.storage.storage_reader import StorageReader
 
 if __name__ == '__main__':
-    db2.connect()
-    Event.create_table()
+    conn.connect()
+    try:
+        File.create_table()
+        conn.create_tables([
+            File,
+            Event
+        ])
+    except Exception as e:
+        print(str(e))
     StorageReader.read()
 
 
