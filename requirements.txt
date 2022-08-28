@@ -4,3 +4,4 @@ peewee
 pathlib
 pymysql
 cryptography
+pandas

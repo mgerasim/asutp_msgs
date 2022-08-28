@@ -47,6 +47,7 @@ class MessageProcessing:
         file.date_started = datetime.datetime.now()
         file.count_added = 0
         file.count_duplicated = 0
+        file.message_max_date = datetime.datetime.min
 
         index = 0
         columns = None
@@ -68,6 +69,9 @@ class MessageProcessing:
             event.message = FieldFetcher.MessageFetch(columns, row)
             event.file_name = file_name
             event.nps = ExtractNpsFromFileNameHelper.run(file_name=file_name)
+
+            if event.date_created > file.message_max_date:
+                file.message_max_date = event.date_created
 
             try:
                 event.save()

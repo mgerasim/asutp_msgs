@@ -1,3 +1,4 @@
+import datetime
 from unittest import TestCase
 
 from app.message.processing.fetchers.field_fetcher import FieldFetcher
@@ -12,10 +13,12 @@ class TestFieldFetcher(TestCase):
     def test_date_created_fetch(self):
 
         columns = [Column('Дата')]
-        row = [Column('11.11.1111')]
+        row = [Column('2022-05-31 23:58:23.002')]
         value = FieldFetcher.DateCreatedFetch(columns=columns,
                                               row=row)
-        self.assertEqual(first=row[0].value, second=value)
+        #self.assertEqual(first=row[0].value, second=value)
+
+        self.assertEqual(type(value), datetime.datetime)
 
 
     def test_message_fetch(self):
@@ -78,6 +81,15 @@ class TestFieldFetcher(TestCase):
         value = FieldFetcher.ObjectFetch(columns=columns,
                                          row=row)
         self.assertEqual(first='TEST',
+                         second=value)
+
+
+    def test_object_fetch_6(self):
+        columns = [Column('Дата'), Column('Сообщение')]
+        row = [Column('11.11.1111'), Column('ХОЗ.-ПИТЬЕВОЙ НАСОС НВ1. ОТКЛЮЧЕН')]
+        value = FieldFetcher.ObjectFetch(columns=columns,
+                                         row=row)
+        self.assertEqual(first='ХОЗ-ПИТЬЕВОЙ НАСОС НВ1',
                          second=value)
 
 
