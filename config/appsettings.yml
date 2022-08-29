@@ -1,1 +1,10 @@
 storage: "./storage_example"
+provider: "sqlite" # sqlite or mysql
+sqlite_db: "asutp.db"
+mysql_db: "asutp"
+mysql_username: "root"
+mysql_password: "asutp"
+mysql_hostname: "db"
+mysql_port: 3306
+
+

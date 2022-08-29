@@ -1,16 +1,20 @@
+import datetime
+import pandas as pd
+
+
 class FieldFetcher:
     @staticmethod
-    def DateCreatedFetch(columns, row):
+    def DateCreatedFetch(columns, row) -> datetime.datetime:
         index = -1
         for column in columns:
             index += 1
             match column.value.upper():
                 case 'ВРЕМЯ':
-                    return row[index].value
+                    return datetime.datetime.combine(pd.to_datetime(row[index].value).date(), pd.to_datetime(row[index].value).time())
                 case 'ДАТА':
-                    return row[index].value
+                    return datetime.datetime.combine(pd.to_datetime(row[index].value).date(), pd.to_datetime(row[index].value).time())
                 case 'ДАТА СООБЩЕНИЯ':
-                    return row[index].value
+                    return datetime.datetime.combine(pd.to_datetime(row[index].value).date(), pd.to_datetime(row[index].value).time())
 
     @staticmethod
     def MessageFetch(columns, row):
@@ -37,6 +41,7 @@ class FieldFetcher:
 
         message = message.strip('.')
         message = message.replace('_', '.')
+        message = message.replace('ХОЗ.-', 'ХОЗ-')
         object = message.split('.')[0]
         return object
 

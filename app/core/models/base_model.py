@@ -1,42 +1,35 @@
+import os
+
 from peewee import *
 
 from playhouse.pool import PooledMySQLDatabase
 from playhouse.shortcuts import ReconnectMixin
 from playhouse.sqliteq import SqliteQueueDatabase, SqliteExtDatabase
 
-db2 = SqliteExtDatabase('asutp_msgs.db')
+from app.config.config_loader import ConfigLoader
 
-db = SqliteQueueDatabase(
-    'asutp_msgs.db',
-    use_gevent=False,  # Use the standard library "threading" module.
-    autostart=True,  # The worker thread now must be started manually.
-    queue_max_size=64,  # Max. # of pending writes that can accumulate.
-    results_timeout=5.0)  # Max. time to wait for query to be executed.
 
 class ReconnectMySQLDatabase(ReconnectMixin, PooledMySQLDatabase):
     pass
 
-#conn = SqliteDatabase(configs.database.DBNAME, pragmas={
-#    'journal_mode': 'wal',
-#    'cache_size': 10000,  # 10000 pages, or ~40MB
-#    'foreign_keys': 1,  # Enforce foreign-key constraints
-#})
 
-#conn = MySQLDatabase('tgbotdb', user='tgbot', password='3-Gj%Aw{L@+Ds.79',
-#                         host='localhost', port=3306)
+config = ConfigLoader.load()
 
-dbname='tgbotdb'
+DATABASE_PROVIDER = os.getenv('DATABASE_PROVIDER', config['provider'])
 
-dbhost='localhost'
+conn = None
 
-conn = ReconnectMySQLDatabase(dbname,
-                     user='tgbot',
-                     password='3-Gj%Aw{L@+Ds.79',
-                     host=dbhost,
-                     port=3306,
-                     max_connections=100,
-                     stale_timeout=300,
-                     timeout=0)
+if DATABASE_PROVIDER == 'mysql':
+    conn = ReconnectMySQLDatabase(os.getenv('MYSQL_DB', config['mysql_db']),
+                                  user=os.getenv('MYSQL_USERNAME', config['mysql_username']),
+                                  password=os.getenv('MYSQL_PASSWORD', config['mysql_password']),
+                                  host=os.getenv('MYSQL_HOSTNAME', config['mysql_hostname']),
+                                  port=os.getenv('MYSQL_PORT', config['mysql_port']),
+                                  max_connections=100,
+                                  stale_timeout=300,
+                                  timeout=0)
+else:
+    conn = SqliteExtDatabase('asutp_msgs.db')
 
 
 def set_conn(new_conn):
@@ -51,6 +44,5 @@ def get_conn():
 
 class BaseModel(Model):
     class Meta:
-        global db2
-        database = db2
-        #database = conn  # соединение с базой, из шаблона выше
+        global conn
+        database = conn  # соединение с базой, из шаблона выше
