@@ -3,8 +3,8 @@ version: "3.8"
 services:
 
   jupiter:
-    image: jupyter/datascience-notebook
-    container_name: asutp_jupyter
+    image: mgerasimdev/asutp_jupyter
+    container_name: asutp_jupyter1
     restart: always
     ports:
       - '8889:8888'
