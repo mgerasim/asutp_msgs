@@ -67,6 +67,11 @@ class DataProcessor(BaseProcessor, ABC):
             data.count_severity_warning += row['count_severity_warning']
             data.count_severity_critical += row['count_severity_critical']
             data.date = row['EventTime'].date()
-            data.save()
+            try:
+                data.save()
+            except:
+                pass
+            finally:
+                pass
 
         super().end_prepare()

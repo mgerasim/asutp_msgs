@@ -13,7 +13,6 @@ from app.storage.storage_reader import StorageReader
 if __name__ == '__main__':
     conn.connect()
     try:
-        File.create_table()
         conn.create_tables([
             File,
             Event,
