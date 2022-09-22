@@ -20,7 +20,9 @@ if __name__ == '__main__':
         ])
     except Exception as e:
         print(str(e))
-    StorageReader.read()
+
+    while True:
+        StorageReader.read()
 
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
