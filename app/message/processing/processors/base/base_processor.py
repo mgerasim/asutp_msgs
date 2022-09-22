@@ -4,6 +4,7 @@ import datetime
 from app.helpers.extract_nps_from_file_name_helper import ExtractNpsFromFileNameHelper
 from app.helpers.save_nps_helper import SaveNpsHelper
 from app.models.file import File
+from app.state.station_calculator import StationCalculator
 
 
 class BaseProcessor(ABC):
@@ -25,7 +26,6 @@ class BaseProcessor(ABC):
         self.file.date_ended = datetime.datetime.now()
         self.file.save()
         StationCalculator.calculate(self.nps)
-
 
     @abstractmethod
     def row_processing(self, columns, row):
