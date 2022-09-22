@@ -24,6 +24,8 @@ class BaseProcessor(ABC):
     def end_prepare(self):
         self.file.date_ended = datetime.datetime.now()
         self.file.save()
+        StationCalculator.calculate(self.nps)
+
 
     @abstractmethod
     def row_processing(self, columns, row):

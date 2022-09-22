@@ -25,7 +25,7 @@ if __name__ == '__main__':
         print(str(e))
 
     while True:
-        #StorageReader.read()
+        StorageReader.read()
         StateCalculator.calculate()
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/

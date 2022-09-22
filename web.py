@@ -10,7 +10,7 @@ app = Flask(__name__)
 @app.route('/metrics')
 def metrics():
     metrics = ''
-    query = Station.select()
+    query = Station.select(Station.state > 0)
     for row in query:
         metrics += 'state{metric="%s"} %f\n' \
                    % (row.title, row.state)
