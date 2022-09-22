@@ -82,6 +82,17 @@ services:
     links:
       - db
 
+  app_web:
+    container_name: asutp_app_web
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.web
+    restart: always
+    ports:
+      - '8500:5000'
+    links:
+      - db
+
 networks:
   events:
     driver: bridge

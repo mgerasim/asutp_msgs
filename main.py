@@ -8,6 +8,8 @@ from app.core.models.base_model import conn
 from app.models.data import Data
 from app.models.event import Event
 from app.models.file import File
+from app.models.station import Station
+from app.state.state_calculator import StateCalculator
 from app.storage.storage_reader import StorageReader
 
 if __name__ == '__main__':
@@ -16,13 +18,14 @@ if __name__ == '__main__':
         conn.create_tables([
             File,
             Event,
-            Data
+            Data,
+            Station
         ])
     except Exception as e:
         print(str(e))
 
     while True:
-        StorageReader.read()
-
+        #StorageReader.read()
+        StateCalculator.calculate()
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/

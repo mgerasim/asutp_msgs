@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 import datetime
 
 from app.helpers.extract_nps_from_file_name_helper import ExtractNpsFromFileNameHelper
+from app.helpers.save_nps_helper import SaveNpsHelper
 from app.models.file import File
 
 
@@ -18,6 +19,7 @@ class BaseProcessor(ABC):
         self.file.message_max_date = datetime.datetime.min
 
         self.nps = ExtractNpsFromFileNameHelper.run(file_name=self.file.file_name)
+        SaveNpsHelper.save(self.nps)
 
     def end_prepare(self):
         self.file.date_ended = datetime.datetime.now()
