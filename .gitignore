@@ -187,6 +187,7 @@ fabric.properties
 *.db
 
 storage_example*/
+storage_example/
 
 data/
 

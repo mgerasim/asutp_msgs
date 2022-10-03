@@ -5,21 +5,28 @@
 
 # Press the green button in the gutter to run the script.
 from app.core.models.base_model import conn
+from app.models.data import Data
 from app.models.event import Event
 from app.models.file import File
+from app.models.station import Station
+from app.state.state_calculator import StateCalculator
 from app.storage.storage_reader import StorageReader
 
 if __name__ == '__main__':
     conn.connect()
     try:
-        File.create_table()
         conn.create_tables([
             File,
-            Event
+            Event,
+            Data,
+            Station
         ])
     except Exception as e:
         print(str(e))
-    StorageReader.read()
 
+    while True:
+        StateCalculator.calculate()
+        StorageReader.read()
+        StateCalculator.calculate()
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/

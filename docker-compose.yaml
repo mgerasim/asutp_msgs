@@ -59,17 +59,17 @@ services:
     image: phpmyadmin/phpmyadmin
     container_name: asutp_phpmyadmin
     links:
-      - mariadb
+      - db
     environment:
       TZ: Europe/Moscow
-      PMA_HOST: mariadb
+      PMA_HOST: db
       PMA_PORT: 3306
       PMA_ARBITRARY: 1
     restart: always
     ports:
       - '8082:80'
     depends_on:
-      - mariadb
+      - db
 
   app_main:
     container_name: asutp_app_main
@@ -80,7 +80,20 @@ services:
     volumes:
       - ./storage_example:/usr/src/app/storage_example
     links:
-      - mariadb
+      - db
+
+  app_web:
+    container_name: asutp_app_web
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.web
+    restart: always
+    ports:
+      - '8500:5000'
+    links:
+      - db
+    depends_on:
+      - db
 
 networks:
   events:

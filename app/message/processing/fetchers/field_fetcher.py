@@ -15,6 +15,8 @@ class FieldFetcher:
                     return datetime.datetime.combine(pd.to_datetime(row[index].value).date(), pd.to_datetime(row[index].value).time())
                 case 'ДАТА СООБЩЕНИЯ':
                     return datetime.datetime.combine(pd.to_datetime(row[index].value).date(), pd.to_datetime(row[index].value).time())
+                case 'ВРЕМЯ СОБЫТИЯ':
+                    return datetime.datetime.combine(pd.to_datetime(row[index].value).date(), pd.to_datetime(row[index].value).time())
 
     @staticmethod
     def MessageFetch(columns, row):
@@ -130,7 +132,7 @@ class FieldFetcher:
                     case 'FFFF0000':
                         return 2
                     case _:
-                        raise Exception(f'Не удалось определить важность сообщения: {str(row[1].fill.start_color.rgb)}')
+                        return 0
             severity = FieldFetcher.ConvertPriorityToSeverity(priority)
             return severity
 

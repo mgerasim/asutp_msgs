@@ -6,6 +6,8 @@ from peewee import IntegrityError
 
 from app.helpers.extract_nps_from_file_name_helper import ExtractNpsFromFileNameHelper
 from app.message.processing.fetchers.field_fetcher import FieldFetcher
+from app.message.processing.processors.data_processor import DataProcessor
+from app.message.processing.processors.event_processor import EventProcessor
 from app.models.event import Event
 from app.models.file import File
 
@@ -42,12 +44,9 @@ class MessageProcessing:
     def run(file_name):
         rows = MessageProcessing.read_rows(file_name)
 
-        file = File()
-        file.file_name = file_name
-        file.date_started = datetime.datetime.now()
-        file.count_added = 0
-        file.count_duplicated = 0
-        file.message_max_date = datetime.datetime.min
+        processor = DataProcessor() #EventProcessor()
+
+        processor.begin_prepare(file_name=file_name)
 
         index = 0
         columns = None
@@ -62,34 +61,6 @@ class MessageProcessing:
             if row[0].value is None:
                 continue
 
-            event = Event()
-            event.date_created = FieldFetcher.DateCreatedFetch(columns, row)
-            event.object = FieldFetcher.ObjectFetch(columns, row)
-            event.severity = FieldFetcher.SeverityFetch(columns, row)
-            event.message = FieldFetcher.MessageFetch(columns, row)
-            event.file_name = file_name
-            event.nps = ExtractNpsFromFileNameHelper.run(file_name=file_name)
+            processor.row_processing(columns, row)
 
-            if event.date_created > file.message_max_date:
-                file.message_max_date = event.date_created
-
-            try:
-                event.save()
-                file.count_added += 1
-            except Exception as e:
-                if 'UNIQUE constraint failed' in str(e):
-                    file.count_duplicated += 1
-                    continue
-                if 'Duplicate entry' in str(e):
-                    file.count_duplicated += 1
-                    continue
-                print(str(e))
-                file.error_msg = str(e)
-
-            file.date_ended = datetime.datetime.now()
-            file.save()
-
-
-
-
-
+        processor.end_prepare()
