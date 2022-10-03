@@ -5,3 +5,4 @@ pathlib
 pymysql
 cryptography
 pandas
+flask

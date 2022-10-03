@@ -28,5 +28,5 @@ class StorageReader:
                     print(f"Файл не обработан: {file_name}")
                     print(traceback.format_exc())
 
-        print('Обраюотка завершена')
+        print('Обработка завершена')
 
