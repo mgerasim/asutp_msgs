@@ -25,6 +25,7 @@ if __name__ == '__main__':
         print(str(e))
 
     while True:
+        StateCalculator.calculate()
         StorageReader.read()
         StateCalculator.calculate()
 

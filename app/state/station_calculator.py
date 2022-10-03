@@ -17,7 +17,10 @@ def state(data):
 class StationCalculator:
     @staticmethod
     def calculate(station_title):
+        print(f'station calculate: {station_title}')
         data = Data.select().where(Data.nps == station_title)
+        if len(data) == 0:
+            return -1
         df = pd.DataFrame(data.dicts())
         df.index = df['id']
         df.pop('id')

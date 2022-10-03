@@ -15,6 +15,8 @@ class FieldFetcher:
                     return datetime.datetime.combine(pd.to_datetime(row[index].value).date(), pd.to_datetime(row[index].value).time())
                 case 'ДАТА СООБЩЕНИЯ':
                     return datetime.datetime.combine(pd.to_datetime(row[index].value).date(), pd.to_datetime(row[index].value).time())
+                case 'ВРЕМЯ СОБЫТИЯ':
+                    return datetime.datetime.combine(pd.to_datetime(row[index].value).date(), pd.to_datetime(row[index].value).time())
 
     @staticmethod
     def MessageFetch(columns, row):
