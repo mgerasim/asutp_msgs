@@ -92,6 +92,8 @@ services:
       - '8500:5000'
     links:
       - db
+    depends_on:
+      - db
 
 networks:
   events:

@@ -20,3 +20,9 @@ sudo docker push mgerasimdev/asutp_msgs_app_main
 
 sudo docker save -o ~/asutp_msgs_app_main.tar mgerasimdev/asutp_msgs_app_main:latest
 sudo chown redos:redos ~/asutp_msgs_app_main.tar 
+
+
+sudo docker tag asutp_msgs_app_web mgerasimdev/asutp_msgs_app_web
+sudo docker push mgerasimdev/asutp_msgs_app_web
+sudo docker save -o ~/asutp_msgs_app_web.tar mgerasimdev/asutp_msgs_app_web:latest
+sudo chown redos:redos ~/asutp_msgs_app_web.tar 
