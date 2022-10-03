@@ -85,10 +85,8 @@ services:
       - db
 
   app_web:
-    container_name: asutp_app_web
-    build:
-      context: ./
-      dockerfile: ./Dockerfile.web
+    image: mgerasimdev/asutp_msgs_app_web:latest
+    container_name: mgerasimdev_asutp_app_web
     restart: always
     ports:
       - '8500:5000'
