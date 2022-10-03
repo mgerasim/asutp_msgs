@@ -78,8 +78,23 @@ services:
     environment:
       DATABASE_PROVIDER: 'mysql'
     volumes:
-      - ./storage_example:/usr/src/app/storage_example
+      - /storage:/storage
     links:
+      - db
+    depends_on:
+      - db
+
+  app_web:
+    container_name: asutp_app_web
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.web
+    restart: always
+    ports:
+      - '8500:5000'
+    links:
+      - db
+    depends_on:
       - db
 
 networks:
