@@ -19,8 +19,8 @@ scrape_configs:
     static_configs:
     - targets: ['127.0.0.1:9090']
 
-  - job_name: 'srv_count'
+  - job_name: 'app_web'
     metrics_path: '/metrics'
     scrape_interval: 5s
     static_configs:
-    - targets: ['srv_count:5000']
+    - targets: ['app_web:5000']

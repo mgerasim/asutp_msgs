@@ -13,7 +13,7 @@ def metrics():
     query = Station.select().where(Station.state > 0)
     for row in query:
 
-       metrics += 'state{metric="%s"} %f\n' \
+       metrics += 'state{metric="%s",} %f\n' \
                    % (row.title, row.state)
     return metrics
 

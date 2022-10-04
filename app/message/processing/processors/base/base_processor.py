@@ -18,14 +18,15 @@ class BaseProcessor(ABC):
         self.file.count_added = 0
         self.file.count_duplicated = 0
         self.file.message_max_date = datetime.datetime.min
+        self.file.save()
 
         self.nps = ExtractNpsFromFileNameHelper.run(file_name=self.file.file_name)
         SaveNpsHelper.save(self.nps)
 
     def end_prepare(self):
+        StationCalculator.calculate(self.nps)
         self.file.date_ended = datetime.datetime.now()
         self.file.save()
-        StationCalculator.calculate(self.nps)
 
     @abstractmethod
     def row_processing(self, columns, row):
