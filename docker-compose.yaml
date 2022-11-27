@@ -3,7 +3,7 @@ version: "3.8"
 services:
 
   jupiter:
-    image: jupyter/datascience-notebook
+    image: localhost:8084/jupyter/datascience-notebook
     container_name: asutp_jupyter
     restart: always
     ports:
@@ -15,7 +15,7 @@ services:
     command: "start-notebook.sh --NotebookApp.token='' --NotebookApp.password=''"
 
   prometheus:
-    image: prom/prometheus
+    image: localhost:8084/prom/prometheus
     container_name: asutp_prometheus
     restart: always
     ports:
@@ -27,7 +27,7 @@ services:
 
   grafana:
     container_name: asutp_grafana
-    image: grafana/grafana:latest
+    image: localhost:8084/grafana/grafana:latest
     volumes:
       - ./config/grafana.yml:/etc/grafana/provisioning/datasources/datasource.yaml
       - ./data/grafana:/var/lib/grafana
@@ -38,7 +38,7 @@ services:
     user: "1000"
 
   db:
-    image: mariadb:latest
+    image: localhost:8084/mariadb:latest
     container_name: asutp_db
     restart: always
 #    command: --init-file /docker-entrypoint-initdb.d/init.sql
@@ -56,7 +56,7 @@ services:
     #user: "1000:1000"
 
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin
+    image: localhost:8084/phpmyadmin/phpmyadmin
     container_name: asutp_phpmyadmin
     links:
       - db
@@ -77,8 +77,11 @@ services:
       context: ./
       dockerfile: ./Dockerfile
     restart: always
+    environment:
+      DATABASE_PROVIDER: 'mysql'
     volumes:
-      - ./storage_example:/usr/src/app/storage_example
+      - ./storage_example:/storage
+      - ./config/pip.conf:/etc/pip.conf
     links:
       - db
 
@@ -88,6 +91,8 @@ services:
       context: ./
       dockerfile: ./Dockerfile.web
     restart: always
+    volumes:
+      - ./config/pip.conf:/etc/pip.conf
     ports:
       - '8500:5000'
     links:

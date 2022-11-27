@@ -26,3 +26,13 @@ sudo docker tag asutp_msgs_app_web mgerasimdev/asutp_msgs_app_web
 sudo docker push mgerasimdev/asutp_msgs_app_web
 sudo docker save -o ~/asutp_msgs_app_web.tar mgerasimdev/asutp_msgs_app_web:latest
 sudo chown redos:redos ~/asutp_msgs_app_web.tar 
+
+
+export PIP_CONFIG_FILE=./config/pip.conf
+set PIP_CONFIG_FILE=./config/pip.conf
+
+docker login -u admin localhost:8083
+
+docker login -u admin localhost:8084
+
+https://docs.docker.com/config/pruning/

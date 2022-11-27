@@ -1,4 +1,4 @@
-FROM python:3.10
+FROM localhost:8084/python:3.10
 
 RUN mkdir -p /usr/src/app
 
@@ -11,6 +11,8 @@ COPY app/. /usr/src/app/app/
 COPY config/. /usr/src/app/config/
 
 COPY requirements.txt /usr/src/app/
+
+COPY config/pip.conf /etc/
 
 RUN pip install --no-cache-dir -r ./requirements.txt
 
