@@ -1,4 +1,4 @@
-FROM python:3.10
+FROM localhost:8084/python:3.10
 
 RUN mkdir -p /usr/src/app
 
@@ -9,6 +9,8 @@ COPY main.py /usr/src/app/
 COPY app/. /usr/src/app/app/
 
 COPY config/. /usr/src/app/config/
+
+COPY config/pip.conf /etc/
 
 COPY requirements.txt /usr/src/app/
 
