@@ -10,14 +10,14 @@ def ratio_count(data, severity_name):
 # Функция расчёта модели показателя нештатной работоспособности станции
 def state(data):
     # Коэффициент выравнивающий масштаб аварийных и предупредительных сообщений
-    A = 2
-    data['state'] = sqrt((A*data['ratio_count_severity_critical'])**2 + data['ratio_count_severity_warning']**2)
+    A = 4
+    data['state'] = sqrt((A*data['ratio_count_severity_critical'])**2 + (A*A*data['ratio_count_severity_warning'])**2)
 
 
 class StationCalculator:
     @staticmethod
     def calculate(station_title):
-        print(f'station calculate: {station_title}')
+#        print(f'station calculate: {station_title}')
         data = Data.select().where(Data.nps == station_title)
         if len(data) == 0:
             return -1

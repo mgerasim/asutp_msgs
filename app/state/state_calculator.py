@@ -8,6 +8,6 @@ class StateCalculator:
         stations = Station.select()
         for row in stations:
             state = StationCalculator.calculate(row.title)
-            print(state)
+#           print(state)
             row.state = state
             row.save()

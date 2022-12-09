@@ -1,4 +1,4 @@
-FROM localhost:8084/python:3.10
+FROM localhost:8083/python:3.10
 
 RUN mkdir -p /usr/src/app
 

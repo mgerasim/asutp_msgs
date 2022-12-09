@@ -22,11 +22,11 @@ class StorageReader:
                     if file_name not in current_files:
                         print(f"Файл не загружен: {file_name}")
                         MessageProcessing.run(file_name)
-                    else:
-                        print(f"Файл загружен: {file_name}")
+#                    else:
+#                       print(f"Файл загружен: {file_name}")
                 except Exception:
                     print(f"Файл не обработан: {file_name}")
                     print(traceback.format_exc())
 
-        print('Обработка завершена')
+#       print('Обработка завершена')
 

@@ -42,11 +42,12 @@ class MessageProcessing:
 
     @staticmethod
     def run(file_name):
-        rows = MessageProcessing.read_rows(file_name)
 
         processor = DataProcessor() #EventProcessor()
 
         processor.begin_prepare(file_name=file_name)
+
+        rows = MessageProcessing.read_rows(file_name)
 
         index = 0
         columns = None
