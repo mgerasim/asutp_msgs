@@ -36,3 +36,7 @@ docker login -u admin localhost:8083
 docker login -u admin localhost:8084
 
 https://docs.docker.com/config/pruning/
+
+
+smtp
+https://mikedombrowski.com/2018/03/self-hosting-sentry-with-docker-and-docker-compose/
