@@ -94,7 +94,8 @@ class FieldFetcher:
             case 200:
                 return 2
             case _:
-                raise Exception(f"""Неподдерживаемое качество #{quality}""")
+                return 0
+#                raise Exception(f"""Неподдерживаемое качество #{quality}""")
 
     @staticmethod
     def ConvertPriorityToSeverity(priority: str) -> int:
@@ -111,7 +112,8 @@ class FieldFetcher:
             case 'ВЫСОКИЙ':
                 return 2
             case _ :
-                raise Exception(f"""Неподдерживаемый приоритет #{priority}""")
+               return 0
+#                raise Exception(f"""Неподдерживаемый приоритет #{priority}""")
 
     @staticmethod
     def SeverityFetch(columns, row) -> int:

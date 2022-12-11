@@ -6,6 +6,8 @@ import pandas as pd
 
 from app.models.data import Data
 
+def isNaN(num):
+    return num != num
 
 class DataProcessor(BaseProcessor, ABC):
     datetime_column = []
@@ -28,6 +30,9 @@ class DataProcessor(BaseProcessor, ABC):
         self.datetime_column = []
         self.severity_column = []
         super().begin_prepare(file_name)
+
+    def isNaN(self, num):
+        return num != num
 
     def end_prepare(self):
         data = {'EventTime': self.datetime_column, 'Severity': self.severity_column}
@@ -62,16 +67,25 @@ class DataProcessor(BaseProcessor, ABC):
                 data.count_severity_warning = 0
                 data.count_severity_critical = 0
                 data.nps = self.nps
-            data.count_total += row['count_total']
-            data.count_severity_info += row['count_severity_info']
-            data.count_severity_warning += row['count_severity_warning']
-            data.count_severity_critical += row['count_severity_critical']
+
+
+
+            if self.isNaN(row['count_total']) == False:
+                data.count_total += row['count_total']
+
+            if self.isNaN(row['count_severity_info']) == False:
+                data.count_severity_info += row['count_severity_info']
+
+            if self.isNaN(row['count_severity_warning']) == False:
+                data.count_severity_warning += row['count_severity_warning']
+
+            if self.isNaN(row['count_severity_critical']) == False:
+                data.count_severity_critical += row['count_severity_critical']
+
+            if self.isNaN(self.nps):
+                print('NPS is NaN')
+
             data.date = row['EventTime'].date()
-            try:
-                data.save()
-            except:
-                pass
-            finally:
-                pass
+            data.save()
 
         super().end_prepare()

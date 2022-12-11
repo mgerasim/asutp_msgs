@@ -76,7 +76,7 @@ services:
     container_name: mgerasimdev_asutp_app_main
     restart: always
     environment:
-      DATABASE_PROVIDER: 'mysql'
+      DATABASE_PROVIDER: 'mysql'   
     volumes:
       - /storage:/storage
     links:
